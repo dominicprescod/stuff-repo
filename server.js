@@ -20,8 +20,6 @@ var express               = require('express'),
        app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
        app.post('/stuff', (req, res) => {
-         console.log('received the following: ')
-         console.log(req.body)
          io.emit("log", req.body)
          res.end();
        })
