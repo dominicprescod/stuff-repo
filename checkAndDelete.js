@@ -39,7 +39,6 @@ var checkAndDelete = (auth, docClient, table) => {
       });
   })
 
-
-
-
 }
+
+module.exports = checkAndDelete;
