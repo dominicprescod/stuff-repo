@@ -27,16 +27,31 @@ var express               = require('express'),
          endpoint: "http://dynamodb.us-east-1.amazonaws.com"
        });
 
-       var docClient = new AWS.DynamoDB.DocumentClient();
+       var  docClient = new AWS.DynamoDB.DocumentClient(),
+            table     = "n2p_call_hold";
 
        app.post('/stuff', (req, res) => {
-         docClient.get({TableName: "n2p_call_hold", Key: {"callerId": req.body.CallAPIID}},(err, data) => {
+         docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
            if(err){
              console.log('problem finding the item')
              console.log(err)
            } else {
              console.log('Success finding the item')
-             if(isEmpty(data)){}
+             if(isEmpty(data)){
+               var info = req.body,
+               req.body = {}
+               req.body["callerId"] = info.CallAPIID
+               req.body["info"] = info;
+               docClient.put({TableName: table, Item: req.body }, (pErr, pData) => {
+                 if(pErr) {
+                   console.log('problem saving new item')
+                   console.log(pErr)
+                 } else {
+                   console.log('success saving new item')
+                   console.log(pData)
+                 }
+               })
+             }
              console.log(data)
            }
          })
