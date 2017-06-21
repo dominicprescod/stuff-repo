@@ -1,15 +1,16 @@
 var request = require("request");
 var checkAndDelete = (auth, docClient, table) => {
-  var allItems = docClient.scan({TableName: table}, (err, data) => {
-                  if(err){
-                    console.log('problem getting all items in the table')
-                    console.log(err)
-                  } else {
-                    console.log('success getting all items in the table')
-                    console.log(data)
-                    return data
-                  }
-                })
+  var allItems;
+  docClient.scan({TableName: table}, (err, data) => {
+        if(err){
+          console.log('problem getting all items in the table')
+          console.log(err)
+        } else {
+          console.log('success getting all items in the table')
+          console.log(data)
+          allItems  = data
+        }
+  })
   allItems.map((i)=>{
     var options = {
       method: 'GET',
