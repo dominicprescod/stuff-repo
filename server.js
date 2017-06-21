@@ -38,9 +38,9 @@ var express               = require('express'),
            } else {
              console.log('Success finding the item')
              if(isEmpty(data)){
-               var info = req.body,
-               req.body = {}
-               req.body["callerId"] = info.CallAPIID
+               var info = req.body;
+               req.body = {};
+               req.body["callerId"] = info.CallAPIID;
                req.body["info"] = info;
                docClient.put({TableName: table, Item: req.body }, (pErr, pData) => {
                  if(pErr) {
