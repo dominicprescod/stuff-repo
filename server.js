@@ -5,7 +5,7 @@ var express               = require('express'),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
     repeat                = require('repeat'),
-    beartoken             = require('./beartoken.js'),
+    bearertoken             = require('./bearertoken.js'),
     checkAndDelete        = require('./checkAndDelete.js'),
     request               = require('request'),
     http                  = require('http').Server(app),
@@ -64,9 +64,9 @@ var express               = require('express'),
       //  })
 
       //  Get the Bearer token every hour
-      var bearerToken = "Bearer "+(repeat(beartoken).every(3540,"s").start.now()).access_token
+      var bt = "Bearer "+(repeat(bearertoken).every(3540,"s").start.now()).access_token
       // Check the status of the list of items every second
-      repeat(checkAndDelete).every(1,'s').start.in(5, 's');
+      repeat(checkAndDelete(bt, docClient, table)).every(1,'s').start.in(5, 's');
 
       // // Checking the list of items in the DB
       // app.get('/dynamo', (req, res) => {
