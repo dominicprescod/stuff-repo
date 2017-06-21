@@ -34,37 +34,37 @@ var express               = require('express'),
        var  docClient = new AWS.DynamoDB.DocumentClient(),
             table     = "n2p_call_hold";
 
-       app.post('/stuff', (req, res) => {
-         docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
-           if(err){
-             console.log('problem finding the item')
-             console.log(err)
-           } else {
-             console.log('Success finding the item')
-             if(isEmpty(data)){
-               var info = req.body;
-               req.body = {};
-               req.body["callerId"] = info.CallAPIID;
-               req.body["info"] = info;
-               docClient.put({TableName: table, Item: req.body }, (pErr, pData) => {
-                 if(pErr) {
-                   console.log('problem saving new item')
-                   console.log(pErr)
-                 } else {
-                   console.log('success saving new item')
-                   console.log(pData)
-                 }
-               })
-             }
-             console.log(data)
-           }
-         })
-         io.emit("log", req.body)
-         res.end();
-       })
+      //  app.post('/stuff', (req, res) => {
+      //    docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
+      //      if(err){
+      //        console.log('problem finding the item')
+      //        console.log(err)
+      //      } else {
+      //        console.log('Success finding the item')
+      //        if(isEmpty(data)){
+      //          var info = req.body;
+      //          req.body = {};
+      //          req.body["callerId"] = info.CallAPIID;
+      //          req.body["info"] = info;
+      //          docClient.put({TableName: table, Item: req.body }, (pErr, pData) => {
+      //            if(pErr) {
+      //              console.log('problem saving new item')
+      //              console.log(pErr)
+      //            } else {
+      //              console.log('success saving new item')
+      //              console.log(pData)
+      //            }
+      //          })
+      //        }
+      //        console.log(data)
+      //      }
+      //    })
+      //    io.emit("log", req.body)
+      //    res.end();
+      //  })
 
       //  Get the Bearer token every hour
-        var bearerToken = "Bearer "+(repeat(beartoken).every(3540,"s").start.now()).access_token
+      var bearerToken = "Bearer "+(repeat(beartoken).every(3540,"s").start.now()).access_token
       // Check the status of the list of items every second
       repeat(checkAndDelete).every(1,'s').start.in(5, 's');
 
