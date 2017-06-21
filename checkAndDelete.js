@@ -4,7 +4,7 @@ var checkAndDelete = (auth, docClient, table) => {
                   if(err){
                     console.log('problem getting all items in the table')
                     console.log(err)
-                  } else _{
+                  } else {
                     console.log('success getting all items in the table')
                     console.log(data)
                     return data
