@@ -4,6 +4,10 @@ var express               = require('express'),
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
+    repeat                = require('repeat'),
+    beartoken             = require('./beartoken.js'),
+    checkAndDelete        = require('./checkAndDelete.js'),
+    request               = require('request'),
     http                  = require('http').Server(app),
     io                    = require('socket.io')(http);
 
@@ -59,23 +63,27 @@ var express               = require('express'),
          res.end();
        })
 
+      //  Get the Bearer token every hour
+        var bearerToken = "Bearer "+(repeat(beartoken).every(3540,"s").start.now()).access_token
+      // Check the status of the list of items every second
+      repeat(checkAndDelete).every(1,'s').start.in(5, 's');
 
-      // Checking the list of items in the DB
-      app.get('/dynamo', (req, res) => {
-        docClient.scan({TableName:"n2p_call_hold"}, (err, data) => {
-          if(err){
-            console.log('problem finding all the items');
-            res.send(err)
-          } else {
-            console.log('success finding all the items')
-            res.send(data)
-          }
-        })
-      })
-      //  I need to get the stupid Bearer token every?
-
-      // Check the N2P to see if the
-
+      // // Checking the list of items in the DB
+      // app.get('/dynamo', (req, res) => {
+      //   docClient.scan({TableName:"n2p_call_hold"}, (err, data) => {
+      //     if(err){
+      //       console.log('problem finding all the items');
+      //       res.send(err)
+      //     } else {
+      //       console.log('success finding all the items')
+      //       res.send(data)
+      //     }
+      //   })
+      // })
+      // //  I need to get the stupid Bearer token every?
+      //
+      // // Check the N2P to see if the
+      //
        http.listen(port, () => {
          console.log("I'm on port: "+port)
        })
