@@ -1,45 +1,72 @@
 var request = require("request");
-var checkAndDelete = (auth, docClient, table) => {
-  var allItems;
+var AWS = require('aws-sdk');
+var http = require("https");
+AWS.config.update({
+  region: "us-east-1",
+  endpoint: "http://dynamodb.us-east-1.amazonaws.com"
+});
+var  docClient = new AWS.DynamoDB.DocumentClient(),
+     table     = "n2p_call_hold";
+var checkAndDelete = (docClient, table) => {
   docClient.scan({TableName: table}, (err, data) => {
         if(err){
           console.log('problem getting all items in the table')
           console.log(err)
         } else {
           console.log('success getting all items in the table')
-          console.log(data)
-          allItems  = data
-        }
-  })
-  allItems.map((i)=>{
-    var options = {
-      method: 'GET',
-      url: 'https://portal.net2phoneoffice.com/uapi/phoneCalls/0241/@self/'+i.callerId,
-      headers: {
-        'postman-token': '63bdb11d-c329-5914-30c1-8d5a004261c5',
-        'cache-control': 'no-cache',
-        'content-type': 'application/json',
-        'authorization': auth
-      }
-    };
-
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-        console.log(body);
-        if(!body.entry){
-          docClient.delete({TableName:table, Key:{"callerId":i.callerId}}, (e,d)=>{
-            if(e){
-              console.log('problem deleting caller object')
-              console.log(e)
-            } else {
-              console.log('success deleting caller object')
-              console.log(d)
-            }
+          // console.log(JSON.stringify(data))
+          // console.log(JSON.stringify(data.Items))
+          var bearertoken = data.Items.find((i)=>{
+            return i.callerId === "BearerToken"
           })
+          var all = data.Items;
+          var clearAll = (elem) => {
+            console.log('clearAll()')
+              var options = {
+                "method": "GET",
+                "hostname": "portal.net2phoneoffice.com",
+                "port": null,
+                "path": "/uapi/phoneCalls/0241/@self/"+elem.callerId,
+                "headers": {
+                  "authorization": bearertoken.info.token,
+                  "content-type": "application/json",
+                  "cache-control": "no-cache",
+                  "postman-token": "d8a42170-a04a-b28e-49dd-b37d0531425d"
+                }
+              };
+
+            if(elem.callerId !== "BearerToken"){
+                  var req = http.request(options, function (res) {
+                  var chunks = [];
+
+                  res.on("data", function (chunk) {
+                    chunks.push(chunk);
+                  });
+
+                  res.on("end", function () {
+                    var body = Buffer.concat(chunks);
+                    console.log(body.toString());
+                    if(!JSON.parse(body).entry.length){
+                      docClient.delete({TableName:table,Key:{"callerId":elem.callerId}},(dErr,dData)=>{
+                        if(dErr){
+                          console.log('problem deleting item')
+                          console.log(dErr)
+                        } else {
+                          console.log('success deleting item')
+                          console.log(dData)
+                        }
+                      })
+                    }
+                  });
+                });
+                req.end();
+              }
+              if(all.length) clearAll(all.shift())
+          }
+          clearAll(all.shift())
         }
-      });
   })
 
 }
-
+checkAndDelete(docClient, table)
 module.exports = checkAndDelete;

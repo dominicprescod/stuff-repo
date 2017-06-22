@@ -1,6 +1,6 @@
 var express               = require('express'),
     bodyParser            = require('body-parser'),
-    port                  = process.env.PORT || 80,
+    port                  = process.env.PORT || 3000,
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
@@ -66,7 +66,7 @@ var express               = require('express'),
       //  Get the Bearer token every hour
       var bt = "Bearer "+(repeat(bearertoken).every(3540,"s").start.now()).access_token
       // Check the status of the list of items every second
-      repeat(checkAndDelete(bt, docClient, table)).every(1,'s').start.in(5, 's');
+      repeat(checkAndDelete(bt, docClient, table)).every(1,'s').start.in(10, 's');
 
       // // Checking the list of items in the DB
       // app.get('/dynamo', (req, res) => {

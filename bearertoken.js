@@ -19,5 +19,4 @@ var getToken = () => {
     return body;
   });
 }
-getToken()
 module.exports = getToken;
