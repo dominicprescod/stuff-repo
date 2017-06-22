@@ -27,7 +27,7 @@ var express               = require('express'),
       //    endpoint: "http://dynamodb.us-east-1.amazonaws.com"
       //  });
 
-       var docClient = new AWS.DynamoDB.DocumentClient();
+      //  var docClient = new AWS.DynamoDB.DocumentClient();
 
        app.post('/stuff', (req, res) => {
         //  docClient.get({TableName: "n2p_call_hold", Key: {"callerId": req.body.CallAPIID}},(err, data) => {
