@@ -2,7 +2,7 @@ var express               = require('express'),
     bodyParser            = require('body-parser'),
     port                  = process.env.PORT || 80,
     app                   = express(),
-    AWS                   = require('aws-sdk'),
+    // AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
     http                  = require('http').Server(app),
     io                    = require('socket.io')(http);
@@ -22,41 +22,42 @@ var express               = require('express'),
        app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
        // DynamoDB configuration
-       AWS.config.update({
-         region: "us-east-1",
-         endpoint: "http://dynamodb.us-east-1.amazonaws.com"
-       });
+      //  AWS.config.update({
+      //    region: "us-east-1",
+      //    endpoint: "http://dynamodb.us-east-1.amazonaws.com"
+      //  });
 
        var docClient = new AWS.DynamoDB.DocumentClient();
 
        app.post('/stuff', (req, res) => {
-         docClient.get({TableName: "n2p_call_hold", Key: {"callerId": req.body.CallAPIID}},(err, data) => {
-           if(err){
-             console.log('problem finding the item')
-             console.log(err)
-           } else {
-             console.log('Success finding the item')
-             if(isEmpty(data)){}
-             console.log(data)
-           }
-         })
+        //  docClient.get({TableName: "n2p_call_hold", Key: {"callerId": req.body.CallAPIID}},(err, data) => {
+        //    if(err){
+        //      console.log('problem finding the item')
+        //      console.log(err)
+        //    } else {
+        //      console.log('Success finding the item')
+        //      if(isEmpty(data)){}
+        //      console.log(data)
+        //    }
+        //  })
+          console.log(req)
          io.emit("log", req.body)
          res.end();
        })
 
 
       // Checking the list of items in the DB
-      app.get('/dynamo', (req, res) => {
-        docClient.scan({TableName:"n2p_call_hold"}, (err, data) => {
-          if(err){
-            console.log('problem finding all the items');
-            res.send(err)
-          } else {
-            console.log('success finding all the items')
-            res.send(data)
-          }
-        })
-      })
+      // app.get('/dynamo', (req, res) => {
+      //   docClient.scan({TableName:"n2p_call_hold"}, (err, data) => {
+      //     if(err){
+      //       console.log('problem finding all the items');
+      //       res.send(err)
+      //     } else {
+      //       console.log('success finding all the items')
+      //       res.send(data)
+      //     }
+      //   })
+      // })
       //  I need to get the stupid Bearer token every?
 
       // Check the N2P to see if the
