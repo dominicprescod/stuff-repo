@@ -68,5 +68,5 @@ var checkAndDelete = (docClient, table) => {
   })
 
 }
-checkAndDelete(docClient, table)
+// checkAndDelete(docClient, table)
 module.exports = checkAndDelete;
