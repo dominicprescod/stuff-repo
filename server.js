@@ -34,10 +34,10 @@ var express               = require('express'),
        var  docClient = new AWS.DynamoDB.DocumentClient(),
             table     = "n2p_call_hold";
 
-      app.post('/apiGateway',(req, res)=>{
+      app.get('/apiGateway',(req, res)=>{
         console.log('apiGateway call')
-        console.log(req.body)
-        res.send(req.body)
+        console.log({success:"got apiGateway"})
+        res.send({success:"got apiGateway"})
       })
       //  app.post('/stuff', (req, res) => {
       //    docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
