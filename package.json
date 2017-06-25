@@ -14,6 +14,7 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "http": "0.0.0",
+    "moment": "^2.18.1",
     "repeat": "0.0.6",
     "request": "^2.81.0",
     "socket.io": "^2.0.3"
