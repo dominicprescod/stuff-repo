@@ -5,6 +5,7 @@ $(()=>{
     console.log('data')
     console.log(data)
     var $item = $("<li>").addClass('caller')
+    $item.attr('id',data.CallAPIID);
     var $phone_number = $("<span>").addClass('phone_number').html(data.CalledDID)
     var $hold_time = $("<span>").addClass("hold_time").html("0:30");
     $item.append($phone_number)
