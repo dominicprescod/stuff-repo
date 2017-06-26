@@ -41,8 +41,35 @@ var express               = require('express'),
       })
 
       app.post('/newCaller', (req, res) => {
-        io.emit('new_caller', req.body);
-        res.send(req.body);
+          docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
+            if(err){
+              console.log('problem finding the item')
+              console.log(err)
+              res.send(err)
+            } else {
+              console.log('Success finding the item')
+              if(isEmpty(data)){
+                var info = req.body;
+                var newItem = {};
+                newItem["callerId"] = info.CallAPIID;
+                newItem["info"] = info;
+                docClient.put({TableName: table, Item: newItem }, (pErr, pData) => {
+                  if(pErr) {
+                    console.log('problem saving new item')
+                    console.log(pErr)
+                    res.send(pErr)
+                  } else {
+                    console.log('success saving new item')
+                    console.log(pData)
+                    io.emit('new_caller', req.body);
+                    res.send(req.body);
+                  }
+                })
+              } else {
+                console.log('item exists')
+            }
+          }
+        })
       });
       //  app.post('/stuff', (req, res) => {
       //    docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
