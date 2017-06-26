@@ -39,6 +39,11 @@ var express               = require('express'),
         console.log({success:"got apiGateway"})
         res.send({success:"got apiGateway"})
       })
+
+      app.post('/newCaller', (req, res) => {
+        io.emit('new_caller', req.body);
+        res.send(req.body);
+      });
       //  app.post('/stuff', (req, res) => {
       //    docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
       //      if(err){
