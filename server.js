@@ -8,6 +8,7 @@ var express               = require('express'),
     bearertoken           = require('./bearertoken.js'),
     checkAndDelete        = require('./checkAndDelete.js'),
     request               = require('request'),
+    moment                = require('moment'),
     http                  = require('http').Server(app),
     io                    = require('socket.io')(http);
 
@@ -49,6 +50,7 @@ var express               = require('express'),
             } else {
               console.log('Success finding the item')
               if(isEmpty(data)){
+                req.body["timestamp"] = moment().format('MMMM Do YYYY, h:mm:ss a');
                 var info = req.body;
                 var newItem = {};
                 newItem["callerId"] = info.CallAPIID;
@@ -61,12 +63,16 @@ var express               = require('express'),
                   } else {
                     console.log('success saving new item')
                     console.log(pData)
+                    // var diff = moment(req.body.timestamp, 'MMMM Do YYYY, h:mm:ss a').fromNow();
+                    // moment().diff(moment(req.body.timestamp,'MMMM Do YYYY, h:mm:ss a'));
+                    // req.body.timestamp = diff;
                     io.emit('new_caller', req.body);
-                    res.send(req.body);
+                    res.send(newItem);
                   }
                 })
               } else {
                 console.log('item exists')
+                res.send(req.body)
             }
           }
         })
