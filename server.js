@@ -1,6 +1,6 @@
 var express               = require('express'),
     bodyParser            = require('body-parser'),
-    port                  = process.env.PORT || 80,
+    port                  = process.env.PORT || 3000,
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
@@ -41,92 +41,24 @@ var express               = require('express'),
         res.send({success:"got apiGateway"})
       })
 
-      app.post('/newCaller', (req, res) => {
-          docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
-            if(err){
-              console.log('problem finding the item')
-              console.log(err)
+      app.get("/all",(req,res) => {
+        docClient.scan({TableName: table}, (err, data)=>{
+            if(err) {
+              console.log('problem getting all items')
               res.send(err)
             } else {
-              console.log('Success finding the item')
-              if(isEmpty(data)){
-                req.body["timestamp"] = moment().format('MMMM Do YYYY, h:mm:ss a');
-                var info = req.body;
-                var newItem = {};
-                newItem["callerId"] = info.CallAPIID;
-                newItem["info"] = info;
-                docClient.put({TableName: table, Item: newItem }, (pErr, pData) => {
-                  if(pErr) {
-                    console.log('problem saving new item')
-                    console.log(pErr)
-                    res.send(pErr)
-                  } else {
-                    console.log('success saving new item')
-                    console.log(pData)
-                    // var diff = moment(req.body.timestamp, 'MMMM Do YYYY, h:mm:ss a').fromNow();
-                    // moment().diff(moment(req.body.timestamp,'MMMM Do YYYY, h:mm:ss a'));
-                    // req.body.timestamp = diff;
-                    io.emit('new_caller', req.body);
-                    res.send(newItem);
-                  }
-                })
-              } else {
-                console.log('item exists')
-                res.send(req.body)
+              console.log("success getting all items")
+              res.send(data)
             }
-          }
         })
+      })
+
+
+      app.post('/newCaller', (req, res) => {
+          io.emit("new_caller", req.body)
+          res.send({success: "Posted to website"});
       });
-      //  app.post('/stuff', (req, res) => {
-      //    docClient.get({TableName: table, Key: {"callerId": req.body.CallAPIID}},(err, data) => {
-      //      if(err){
-      //        console.log('problem finding the item')
-      //        console.log(err)
-      //      } else {
-      //        console.log('Success finding the item')
-      //        if(isEmpty(data)){
-      //          var info = req.body;
-      //          req.body = {};
-      //          req.body["callerId"] = info.CallAPIID;
-      //          req.body["info"] = info;
-      //          docClient.put({TableName: table, Item: req.body }, (pErr, pData) => {
-      //            if(pErr) {
-      //              console.log('problem saving new item')
-      //              console.log(pErr)
-      //            } else {
-      //              console.log('success saving new item')
-      //              console.log(pData)
-      //            }
-      //          })
-      //        }
-      //        console.log(data)
-      //      }
-      //    })
-      //    io.emit("log", req.body)
-      //    res.end();h
-      //  })
 
-      //  Get the Bearer token every hour
-      // var bt = "Bearer "+(repeat(bearertoken).every(3540,"s").start.now()).access_token
-      // Check the status of the list of items every second
-      // repeat(checkAndDelete(bt, docClient, table)).every(1,'s').start.in(10, 's');
-
-      // // Checking the list of items in the DB
-      // app.get('/dynamo', (req, res) => {
-      //   docClient.scan({TableName:"n2p_call_hold"}, (err, data) => {
-      //     if(err){
-      //       console.log('problem finding all the items');
-      //       res.send(err)
-      //     } else {
-      //       console.log('success finding all the items')
-      //       res.send(data)
-      //     }
-      //   })
-      // })
-      // //  I need to get the stupid Bearer token every?
-      //
-      // // Check the N2P to see if the
-      //
        http.listen(port, () => {
          console.log("I'm on port: "+port)
        })

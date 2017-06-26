@@ -1,5 +1,17 @@
 $(()=>{
   var socket  = io();
+
+  $({
+    method: "GET",
+    url: "/all",
+    success: (response) => {
+      console.log(response)
+    },
+    error: (err) => {
+      console.log(err)
+    }
+  })
+  // get new caller and post data to website
   socket.on("new_caller",(data)=>{
     var $list = $('#list');
     console.log('data')
@@ -12,8 +24,10 @@ $(()=>{
     $item.append($hold_time)
     $list.prepend($item)
   })
+  // delete record after Lambda posts
   socket.on("remove_caller", (data) => {
-
+    var $toDelete = $("li[id='"+data.callerId+"']");
+    $toDelete.remove();
   })
 
 })
