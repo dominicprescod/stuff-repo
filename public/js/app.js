@@ -17,8 +17,8 @@ $(()=>{
     console.log('data')
     console.log(data)
     var $item = $("<li>").addClass('caller')
-    $item.attr('id',data.callerId);
-    var $phone_number = $("<span>").addClass('phone_number').html(data.info.CallerIDNum)
+    $item.attr('id',data.Keys.callerId.S);
+    var $phone_number = $("<span>").addClass('phone_number').html(data.info.M.CallerIDNum.S)
     var $hold_time = $("<span>").addClass("hold_time").html("0:30");
     $item.append($phone_number)
     $item.append($hold_time)
@@ -27,7 +27,7 @@ $(()=>{
   // delete record after Lambda posts
   socket.on("remove_caller", (data) => {
     console.log(data)
-    var $toDelete = $("li[id='"+data.callerId+"']");
+    var $toDelete = $("li[id='"+data.Keys.callerId.S+"']");
     $toDelete.remove();
   })
 
