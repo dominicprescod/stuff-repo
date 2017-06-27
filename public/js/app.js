@@ -26,6 +26,7 @@ $(()=>{
   })
   // delete record after Lambda posts
   socket.on("remove_caller", (data) => {
+    console.log(data)
     var $toDelete = $("li[id='"+data.callerId+"']");
     $toDelete.remove();
   })

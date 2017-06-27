@@ -61,6 +61,13 @@ var express               = require('express'),
           res.send({success: "Posted to website"});
       });
 
+      app.post("/deleteCaller", (req,res) => {
+        console.log('deleteCaller')
+        console.log(req.body)
+        io.emit('remove_caller', req.body);
+        res.send({success:"Posted to website"})
+      })
+
        http.listen(port, () => {
          console.log("I'm on port: "+port)
        })
