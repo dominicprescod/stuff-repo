@@ -55,6 +55,8 @@ var express               = require('express'),
 
 
       app.post('/newCaller', (req, res) => {
+          console.log('newCaller')
+          console.log(req.body)
           io.emit("new_caller", req.body)
           res.send({success: "Posted to website"});
       });
