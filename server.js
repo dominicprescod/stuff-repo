@@ -68,7 +68,7 @@ var express               = require('express'),
         res.send({success:"Posted to website"})
       })
 
-      var threeSecondInterval = setInterval(checkAndDelete(docClient, table, io), 3000);
+      // var threeSecondInterval = setInterval(checkAndDelete(docClient, table, io), 3000);
        http.listen(port, () => {
          console.log("I'm on port: "+port)
        })
