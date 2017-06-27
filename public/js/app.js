@@ -18,7 +18,7 @@ $(()=>{
     console.log(data)
     var $item = $("<li>").addClass('caller')
     $item.attr('id',data.Keys.callerId.S);
-    var $phone_number = $("<span>").addClass('phone_number').html(data.info.M.CallerIDNum.S)
+    var $phone_number = $("<span>").addClass('phone_number').html(data.NewImage.info.M.CallerIDNum.S)
     var $hold_time = $("<span>").addClass("hold_time").html("0:30");
     $item.append($phone_number)
     $item.append($hold_time)
