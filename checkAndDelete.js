@@ -7,7 +7,7 @@ AWS.config.update({
 });
 var  docClient = new AWS.DynamoDB.DocumentClient(),
      table     = "n2p_call_hold";
-var checkAndDelete = (docClient, table) => {
+var checkAndDelete = (docClient, table, io) => {
   docClient.scan({TableName: table}, (err, data) => {
         if(err){
           console.log('problem getting all items in the table')
@@ -53,6 +53,7 @@ var checkAndDelete = (docClient, table) => {
                           console.log(dErr)
                         } else {
                           console.log('success deleting item')
+                          io.emit("remove_caller", JSON.parse(body))
                           console.log(dData)
                         }
                       })

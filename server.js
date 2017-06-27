@@ -4,8 +4,8 @@ var express               = require('express'),
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
-    repeat                = require('repeat'),
-    bearertoken           = require('./bearertoken.js'),
+    // repeat                = require('repeat'),
+    // bearertoken           = require('./bearertoken.js'),
     checkAndDelete        = require('./checkAndDelete.js'),
     request               = require('request'),
     moment                = require('moment'),
@@ -68,6 +68,7 @@ var express               = require('express'),
         res.send({success:"Posted to website"})
       })
 
+      var threeSecondInterval = setInterval(checkAndDelete(docClient, table, io), 3000);
        http.listen(port, () => {
          console.log("I'm on port: "+port)
        })
