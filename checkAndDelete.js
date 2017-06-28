@@ -1,12 +1,7 @@
 var request = require("request");
-var AWS = require('aws-sdk');
-var http = require("https");
-AWS.config.update({
-  region: "us-east-1",
-  endpoint: "http://dynamodb.us-east-1.amazonaws.com"
-});
-var  docClient = new AWS.DynamoDB.DocumentClient(),
-     table     = "n2p_call_hold";
+var http = require("http");
+
+
 var checkAndDelete = (docClient, table, io) => {
   docClient.scan({TableName: table}, (err, data) => {
         if(err){
