@@ -1,6 +1,6 @@
 var express               = require('express'),
     bodyParser            = require('body-parser'),
-    port                  = process.env.PORT || 3000,
+    port                  = process.env.PORT || 80,
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
@@ -75,7 +75,7 @@ var express               = require('express'),
       var threeSecondInterval = setInterval(()=>{
         console.log('threeSecondInterval')
         var options = { method: 'GET',
-          url: 'http://localhost:3000/checkAndDelete',
+          url: 'http://on-hold.awsdev.idt.net/checkAndDelete',
           headers:
            { 'postman-token': '00deb35e-b547-6033-104e-adf91f08ffb4',
              'cache-control': 'no-cache' } };
