@@ -53,7 +53,6 @@ var checkAndDelete = (docClient, table, io) => {
                           console.log(dErr)
                         } else {
                           console.log('success deleting item')
-                          io.emit("testing", JSON.parse(body))
                           console.log(dData)
                         }
                       })
