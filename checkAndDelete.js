@@ -1,4 +1,4 @@
-var http = require("http");
+var https    = require("https");
 
 var checkAndDelete = (docClient, table) => {
   docClient.scan({TableName: table}, (err, data) => {
@@ -29,10 +29,10 @@ var checkAndDelete = (docClient, table) => {
               };
 
             if(elem.callerId !== "BearerToken"){
-              console.log("not BearerToken")
-              console.log(elem.callerId)
-                  var req = http.request(options, function (res) {
-                    console.log('inside the request')
+              // console.log("not BearerToken")
+              // console.log(elem.callerId)
+                  var req = https.request(options, function (res) {
+                    // console.log('inside the request')
                   var chunks = [];
 
                   res.on("data", function (chunk) {
@@ -41,7 +41,7 @@ var checkAndDelete = (docClient, table) => {
 
                   res.on("end", function () {
                     var body = Buffer.concat(chunks);
-                    console.log(body.toString());
+                    // console.log(body.toString());
                     if(!JSON.parse(body).entry.length){
                       docClient.delete({TableName:table,Key:{"callerId":elem.callerId}},(dErr,dData)=>{
                         if(dErr){
