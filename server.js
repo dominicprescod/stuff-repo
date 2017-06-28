@@ -72,18 +72,18 @@ var express               = require('express'),
         checkAndDelete(docClient, table)
         res.send({success:"got checkAndDelete"})
       })
-      var threeSecondInterval = setInterval(()=>{
-        console.log('threeSecondInterval')
-        var options = { method: 'GET',
-          url: 'http://on-hold.awsdev.idt.net/checkAndDelete',
-          headers:
-           { 'postman-token': '00deb35e-b547-6033-104e-adf91f08ffb4',
-             'cache-control': 'no-cache' } };
-        request(options, function (error, response, body) {
-          if (error) throw new Error(error);
-          console.log(body);
-        });
-      }, 3000);
+      // var threeSecondInterval = setInterval(()=>{
+      //   console.log('threeSecondInterval')
+      //   var options = { method: 'GET',
+      //     url: 'http://on-hold.awsdev.idt.net/checkAndDelete',
+      //     headers:
+      //      { 'postman-token': '00deb35e-b547-6033-104e-adf91f08ffb4',
+      //        'cache-control': 'no-cache' } };
+      //   request(options, function (error, response, body) {
+      //     if (error) throw new Error(error);
+      //     console.log(body);
+      //   });
+      // }, 3000);
       // console.log(url.Url())
        http.listen(port, () => {
          console.log("I'm on port: "+port)
