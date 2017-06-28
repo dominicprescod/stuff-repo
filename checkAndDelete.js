@@ -36,6 +36,8 @@ var checkAndDelete = (docClient, table, io) => {
               };
 
             if(elem.callerId !== "BearerToken"){
+              console.log("not BearerToken")
+              console.log(elem.callerId)
                   var req = http.request(options, function (res) {
                   var chunks = [];
 
