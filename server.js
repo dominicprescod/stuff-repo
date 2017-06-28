@@ -1,6 +1,6 @@
 var express               = require('express'),
     bodyParser            = require('body-parser'),
-    port                  = process.env.PORT || 80,
+    port                  = process.env.PORT || 3000,
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
@@ -8,6 +8,7 @@ var express               = require('express'),
     // bearertoken           = require('./bearertoken.js'),
     checkAndDelete        = require('./checkAndDelete.js'),
     request               = require('request'),
+    url                   = require('url'),
     moment                = require('moment'),
     http                  = require('http').Server(app),
     io                    = require('socket.io')(http);
@@ -67,8 +68,23 @@ var express               = require('express'),
         io.emit('remove_caller', req.body);
         res.send({success:"Posted to website"})
       })
-
-      // var threeSecondInterval = setInterval(checkAndDelete(docClient, table, io), 3000);
+      app.get("/checkAndDelete", (req,res) => {
+        checkAndDelete(docClient, table, io)
+        res.send({success:"got checkAndDelete"})
+      })
+      var threeSecondInterval = setInterval(()=>{
+        console.log('threeSecondInterval')
+        var options = { method: 'GET',
+          url: 'http://localhost:3000/checkAndDelete',
+          headers:
+           { 'postman-token': '00deb35e-b547-6033-104e-adf91f08ffb4',
+             'cache-control': 'no-cache' } };
+        request(options, function (error, response, body) {
+          if (error) throw new Error(error);
+          console.log(body);
+        });
+      }, 3000);
+      // console.log(url.Url())
        http.listen(port, () => {
          console.log("I'm on port: "+port)
        })

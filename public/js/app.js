@@ -31,4 +31,8 @@ $(()=>{
     $toDelete.remove();
   })
 
+  socket.on("testing", (data)=>{
+    console.log(data)
+  })
+
 })
