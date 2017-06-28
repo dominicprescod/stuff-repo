@@ -39,6 +39,7 @@ var checkAndDelete = (docClient, table, io) => {
               console.log("not BearerToken")
               console.log(elem.callerId)
                   var req = http.request(options, function (res) {
+                    console.log('inside the request')
                   var chunks = [];
 
                   res.on("data", function (chunk) {
