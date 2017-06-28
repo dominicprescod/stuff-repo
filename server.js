@@ -1,6 +1,6 @@
 var express               = require('express'),
     bodyParser            = require('body-parser'),
-    port                  = process.env.PORT || 3000,
+    port                  = process.env.PORT || 80,
     app                   = express(),
     AWS                   = require('aws-sdk'),
     isEmpty               = require('./isEmpty.js'),
