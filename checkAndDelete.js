@@ -1,8 +1,6 @@
-var request = require("request");
 var http = require("http");
 
-
-var checkAndDelete = (docClient, table, io) => {
+var checkAndDelete = (docClient, table) => {
   docClient.scan({TableName: table}, (err, data) => {
         if(err){
           console.log('problem getting all items in the table')
